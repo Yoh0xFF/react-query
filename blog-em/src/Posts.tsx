@@ -2,19 +2,20 @@ import { useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
 
 import { PostDetail } from './PostDetail';
+import { Post } from './types';
 
 const maxPostPage = 10;
 
-async function fetchPosts(pageId) {
+async function fetchPosts(pageId: number): Promise<Array<Post>> {
   const response = await fetch(
     `https://jsonplaceholder.typicode.com/posts?_limit=10&_page=${pageId}`
   );
-  return response.json();
+  return (await response.json()) as Array<Post>;
 }
 
 export function Posts() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [selectedPost, setSelectedPost] = useState(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
 
   const queryClient = useQueryClient();
 
@@ -46,7 +47,7 @@ export function Posts() {
     return (
       <>
         <h3>Oops, something went wrong</h3>
-        <p>{error.toString()}</p>
+        <p>{(error as any).toString()}</p>
       </>
     );
   }
@@ -54,15 +55,16 @@ export function Posts() {
   return (
     <>
       <ul>
-        {data.map((post) => (
-          <li
-            key={post.id}
-            className='post-title'
-            onClick={() => setSelectedPost(post)}
-          >
-            {post.title}
-          </li>
-        ))}
+        {data &&
+          data.map((post) => (
+            <li
+              key={post.id}
+              className='post-title'
+              onClick={() => setSelectedPost(post)}
+            >
+              {post.title}
+            </li>
+          ))}
       </ul>
       <div className='pages'>
         <button

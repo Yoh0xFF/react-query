@@ -1,32 +1,37 @@
 import { useEffect } from 'react';
 import { useMutation, useQuery } from 'react-query';
 
-async function fetchComments(postId) {
+import { Comment, Post } from './types';
+
+async function fetchComments(postId: number): Promise<Array<Comment>> {
   const response = await fetch(
     `https://jsonplaceholder.typicode.com/comments?postId=${postId}`
   );
-  return response.json();
+  return (await response.json()) as Array<Comment>;
 }
 
-async function deletePost(postId) {
+async function deletePost(postId: number): Promise<Post> {
   const response = await fetch(
     `https://jsonplaceholder.typicode.com/postId/${postId}`,
     { method: 'DELETE' }
   );
-  return response.json();
+  return (await response.json()) as Post;
 }
 
-async function updatePost(postId) {
+async function updatePost(postId: number): Promise<Post> {
   const response = await fetch(
     `https://jsonplaceholder.typicode.com/postId/${postId}`,
-    { method: 'PATCH', data: { title: 'REACT QUERY FOREVER!!!!' } }
+    {
+      method: 'PATCH',
+      body: JSON.stringify({ data: { title: 'REACT QUERY FOREVER!!!!' } }),
+    }
   );
-  return response.json();
+  return (await response.json()) as Post;
 }
 
-export function PostDetail({ post }) {
-  const updateMutation = useMutation((postId) => updatePost(postId));
-  const deleteMutation = useMutation((postId) => deletePost(postId));
+export function PostDetail({ post }: { post: Post }) {
+  const updateMutation = useMutation((postId: number) => updatePost(postId));
+  const deleteMutation = useMutation((postId: number) => deletePost(postId));
 
   useEffect(() => {
     updateMutation.reset();
@@ -47,7 +52,7 @@ export function PostDetail({ post }) {
     return (
       <>
         <h3>Oops, something went wrong</h3>
-        <p>{error.toString()}</p>
+        <p>{(error as any).toString()}</p>
       </>
     );
   }
@@ -91,11 +96,14 @@ export function PostDetail({ post }) {
 
       <p>{post.body}</p>
       <h4>Comments</h4>
-      {data.map((comment) => (
-        <li key={comment.id}>
-          {comment.email}: {comment.body}
-        </li>
-      ))}
+      <ul>
+        {data &&
+          data.map((comment) => (
+            <li key={comment.id}>
+              {comment.email}: {comment.body}
+            </li>
+          ))}
+      </ul>
     </>
   );
 }
