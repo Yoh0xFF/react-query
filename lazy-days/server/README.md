@@ -1,6 +1,8 @@
 # Lazy Days Spa Server
 
-### A server for the "Lazy Days Spa" app in the Udemy course "React Query: Server State Management for React"
+## Express Rest Api Server
+
+A server for the "Lazy Days Spa" app.
 
 ## Installing
 

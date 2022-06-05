@@ -1,6 +1,8 @@
 # Lazy Days Spa Client
 
-### A React client for the "Lazy Days Spa" app in the Udemy course "React Query: Server State Management for React"
+## React Query Example Application
+
+A React client for the "Lazy Days Spa" app.
 
 ## Installing
 
