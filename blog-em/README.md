@@ -1,6 +1,8 @@
 # Blog-em Ipsum
 
-### A React App for the Udemy course "React Query: Server State Management for React"
+## React Query Basics
+
+Demonstrates basic usage of useQuery and useMutation hooks.
 
 ## Installation
 
